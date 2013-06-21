@@ -4,14 +4,13 @@ GLLocalizedString
 自定义外部plist文件代替LocalizedString文件
 
 转换方法：可用如下代码将Localized.Strings文件转化为@"Strings_%@.plist",currentLanguage文件
+//自动识别语言
 NSArray *languages = [NSLocale preferredLanguages];
     for (NSString *currentLanguage in languages) {
         NSString *path = [[NSBundle mainBundle] pathForResource:@"InfoPlist"
                                                          ofType:@"strings"
                                                     inDirectory:nil
                                                 forLocalization:currentLanguage];
-        
-        // compiled .strings file becomes a "binary property list"
         NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:path];
         
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
