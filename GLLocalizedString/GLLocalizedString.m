@@ -26,6 +26,7 @@ static GLLocalizedString *gleeLocalizedString;
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *docDir = [paths objectAtIndex:0];
         NSString *filePath = [docDir stringByAppendingPathComponent:[NSString stringWithFormat:@"Strings_%@.plist",currentLanguage ]];
+        NSString *tempPath;
         //第一次启动，copy资源文件到document目录
         if (![[NSUserDefaults standardUserDefaults] boolForKey:@"everLaunched"]) {
             for (NSString * language in languages) {
@@ -35,15 +36,21 @@ static GLLocalizedString *gleeLocalizedString;
                                          ofType:@"plist"];
                 if ([[NSFileManager defaultManager] fileExistsAtPath:resourcePath])
                 {
-                     NSString *filePath = [docDir stringByAppendingPathComponent:[NSString stringWithFormat:@"Strings_%@.plist",language ]];
-                    [[NSFileManager defaultManager] copyItemAtPath:resourcePath toPath:filePath error:nil];
-                }                
+                    tempPath = [docDir stringByAppendingPathComponent:[NSString stringWithFormat:@"Strings_%@.plist",language ]];
+                    [[NSFileManager defaultManager] copyItemAtPath:resourcePath toPath:tempPath error:nil];
+                }
             }
         }
         else{
             [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"firstLaunch"];
         }
-        
+        //如果没有与当前语言环境适配的Strings文件，则按指定默认语言加载，如不存在默认指定语言，加载第一个
+        if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+            filePath = [docDir stringByAppendingPathComponent:[NSString stringWithFormat:@"Strings_%@.plist",DEFAULTLANGUAGE]];
+        }
+        if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+            self.localizedStringDict = [NSDictionary dictionaryWithContentsOfFile:tempPath];
+        }
         self.localizedStringDict = [NSDictionary dictionaryWithContentsOfFile:filePath];
     }
     return self;

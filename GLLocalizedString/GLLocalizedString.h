@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #define GLEELocalizedString(key, comment) \
 [[GLLocalizedString shareInstance] localizedStringForKey:(key) value:@""]
-
+#define DEFAULTLANGUAGE @"de"
 @interface GLLocalizedString : NSObject
 @property (nonatomic,retain) NSDictionary *localizedStringDict;
 +(GLLocalizedString*)shareInstance;
