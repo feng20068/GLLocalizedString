@@ -5,16 +5,17 @@ GLLocalizedString
 
 转换方法：可用如下代码将Localized.Strings文件转化为@"Strings_%@.plist",currentLanguage文件
 
-NSArray *languages = [NSLocale preferredLanguages];
-for (NSString *currentLanguage in languages) {
-        NSString *path = [[NSBundle mainBundle] pathForResource:@"InfoPlist"
+	NSArray * languages = [NSLocale preferredLanguages];
+	for (NSString *currentLanguage in languages) {
+
+        NSString *path = [[NSBundle mainBundle] pathForResource:@"Localizable"
                                                          ofType:@"strings"
                                                     inDirectory:nil
                                                 forLocalization:currentLanguage];
         NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:path];        
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
         NSString *docDir = [paths objectAtIndex:0];
-        NSString *filePath = [docDir stringByAppendingPathComponent:[NSString stringWithFormat:@"Strings_%@.plist",currentLanguage ]];
+        NSString *filePath = [docDir stringByAppendingPathComponent:[NSString 		stringWithFormat:@"Strings_%@.plist",currentLanguage ]];
         [dict writeToFile:filePath atomically:YES];
     }
 将生成的@"Strings_%@.plist",currentLanguage文件添加到资源文件中，
